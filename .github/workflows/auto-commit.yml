@@ -1,0 +1,32 @@
+name: Green Contribution Bot
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Update heartbeat file
+        run: |
+          echo "Last update: $(date -u)" > heartbeat.txt
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add heartbeat.txt
+          git commit -m "chore: daily heartbeat" || echo "No changes to commit"
+          git push
