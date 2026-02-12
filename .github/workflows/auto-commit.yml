@@ -31,14 +31,14 @@ jobs:
 
       - name: Make multiple commits
         run: |
-          # Number of commits to make (adjust this)
-          COMMIT_COUNT=5
+          # Random number of commits between 3-7
+          COMMIT_COUNT=$((3 + RANDOM % 5))
           
           for i in $(seq 1 $COMMIT_COUNT); do
             echo "Update $i: $(date -u)" >> heartbeat.txt
             git add heartbeat.txt
-            git commit -m "chore: heartbeat update $i/$(date +%Y-%m-%d)"
-            sleep 1 
+            git commit -m "chore: heartbeat update $i"
+            sleep 1
           done
 
       - name: Push all commits
